@@ -13,6 +13,7 @@ class Manager extends Employee {
     }
 }
 
+module.exports = Manager;
 // const manager = new Manager("hi", 3, "m@gpd.com", 3);
 // const temp = manager.getRole();
 // const deb = 0;
