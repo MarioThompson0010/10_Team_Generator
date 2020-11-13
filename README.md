@@ -1,7 +1,8 @@
 # 10_Team_Generator
 
 ## Screenshots and Video:
-[README video](https://drive.google.com/drive/u/0/folders/13egiMmqGDuJ2yzJInyQklgTVYdZ5s4Sz)
+[README video](https://drive.google.com/drive/u/0/folders/1bicNr8U8tsLQDnyu6b5xI1_jNxpDHq5h)
+
 ![Manager Only](https://github.com/MarioThompson0010/10_Team_Generator/blob/main/Assets/MyTeamManagerOnly.PNG)
 ![Entire Team](https://github.com/MarioThompson0010/10_Team_Generator/blob/main/Assets/MyTeamScreenshot.PNG)
 
