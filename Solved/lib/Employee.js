@@ -20,7 +20,7 @@ class Employee {
     }
 
     getRole(){
-        return this;
+        return "Employee";
     }
 }
 

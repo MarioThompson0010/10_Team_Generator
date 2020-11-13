@@ -27,18 +27,35 @@ function getManager() {
     ).then(
         (response) => {
             const filename = `./output/team.html`;
-            const manager = response.PromptManager;
+            const managerPrompt = response.PromptManager;
+
+            const manager = new Manager(managerPrompt.name, managerPrompt.id, managerPrompt.email, managerPrompt.officeNumber);
             inquirer.prompt(
                 [
                     {
-                        
+
                     }
                 ]
 
-            ).then(
+            ).then((response2) => {
+
+                const data = response2;
+
+               // while (user keeps entering info)
+                //writeToFile(filename, response);
+                //function writeToFile(fileName, data) {
+                //const fs = require('fs');
+                //const output = generated.generateMarkdown(data);
+                // fs.writeFile(fileName, output, (err) =>
+                //     err ? console.log(err) : console.log('Success!')
+                // );
+                // }
+
+            }
 
             );
-            //writeToFile(filename, response);
+
+
         }
     );
 
