@@ -10,8 +10,8 @@ const outputPath = path.join(OUTPUT_DIR, "team.html"); // append team.html to di
 
 const render = require("./lib/htmlRenderer");
 
-//let responseFromUser = ""; // get value from while loop to know when to quit
-
+// employee questions--could be used for manager, too, but wanted to make manager more clear by
+// using vebiage that included "manager";
 const employeeQuestions = {
     employeeName: {
         type: 'input',
@@ -30,6 +30,7 @@ const employeeQuestions = {
     }
 };
 
+// build a specific array for the manager since I want to keep the verbiage explicit.
 const managerQuestions =
     [
         {
@@ -54,33 +55,37 @@ const managerQuestions =
         }
     ];
 
-const arrayOfEmployees = [];
+const arrayOfEmployees = []; // pass this to the render function.
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 
+// get information for all the employees on the team.
 function getInformationEmployee() {
 
     const askManager = () => {
         return inquirer.prompt
             (
-                managerQuestions
+                managerQuestions // start by asking about the manager.
             )
             .then
             (
                 (response) => {
-                    const filename = outputPath;
+                    const filename = outputPath; // filename is another name for outputPath
                     let manager = null;
+
+                    // if the tests didn't fail, we could use error checking
                     try {
                         manager = new Manager(response.ManagerPrompt, response.IdPrompt, response.EmailPrompt, response.OfficePrompt);
                     }
                     catch (err) {
                         console.log(err.message);
                         askManager();
-                        return;
+                        return; // kill other thread
                     }
 
-                    arrayOfEmployees.push(manager);
+                    arrayOfEmployees.push(manager); // save to array
 
+                    // ask if engineer or intern
                     const askType = () => {
 
                         return inquirer.prompt(
@@ -96,7 +101,6 @@ function getInformationEmployee() {
                             .then((responseEmployeeType) => {
 
                                 const data = responseEmployeeType;
-                                //responseFromUser = responseEmployeeType.EmployeePrompt;
                                 if (responseEmployeeType.EmployeePrompt !== 'Exit') {
 
                                     switch (responseEmployeeType.EmployeePrompt) {
@@ -160,7 +164,8 @@ function getInformationEmployee() {
                                                 );
                                             break;
                                         default:
-                                            console.log(`Unrecognized employee type: ${responseEmployeeType.EmployeePrompt}`)
+                                            console.log(`Unrecognized employee type: ${responseEmployeeType.EmployeePrompt}`);
+                                            throw new Error("You're done.  Unrecognized employee type.  Press control-C");
                                             break;
                                     }
                                 }
