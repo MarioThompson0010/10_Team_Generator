@@ -54,121 +54,138 @@ const managerQuestions =
         }
     ];
 
-let arrayOfEmployees = [];
+const arrayOfEmployees = [];
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 
 function getInformationEmployee() {
 
-    inquirer.prompt
-        (
-            managerQuestions
-        )
-        .then
-        (
-            (response) => {
-                const filename = outputPath; // `./output/team.html`;
-                //const managerPrompt = response.ManagerPrompt;
+    const askManager = () => {
+        return inquirer.prompt
+            (
+                managerQuestions
+            )
+            .then
+            (
+                (response) => {
+                    const filename = outputPath;
+                    let manager = null;
+                    try {
+                        manager = new Manager(response.ManagerPrompt, response.IdPrompt, response.EmailPrompt, response.OfficePrompt);
+                    }
+                    catch (err) {
+                        console.log(err.message);
+                        askManager();
+                        return;
+                    }
 
-                const manager = new Manager(response.ManagerPrompt, response.IdPrompt, response.EmailPrompt, response.OfficePrompt);
-                arrayOfEmployees.push(manager);
+                    arrayOfEmployees.push(manager);
 
+                    const askType = () => {
 
-                const askType = () => {
+                        return inquirer.prompt(
+                            [
+                                {
+                                    type: 'list',
+                                    message: 'Choose an employee type or exit',
+                                    name: 'EmployeePrompt',
+                                    choices: ['Engineer', 'Intern', 'Exit'],
+                                }
+                            ]
+                        )
+                            .then((responseEmployeeType) => {
 
-                    return inquirer.prompt(
-                        [
-                            {
-                                type: 'list',
-                                message: 'Choose an employee type or exit',
-                                name: 'EmployeePrompt',
-                                choices: ['Engineer', 'Intern', 'Exit'],
-                            }
-                        ]
-                    )
-                        .then((responseEmployeeType) => {
+                                const data = responseEmployeeType;
+                                responseFromUser = responseEmployeeType.EmployeePrompt;
+                                if (responseEmployeeType.EmployeePrompt !== 'Exit') {
 
-                            const data = responseEmployeeType;
-                            responseFromUser = responseEmployeeType.EmployeePrompt;
-                            if (responseEmployeeType.EmployeePrompt !== 'Exit') {
+                                    switch (responseEmployeeType.EmployeePrompt) {
 
-                                switch (responseEmployeeType.EmployeePrompt) {
+                                        case "Intern":
+                                            inquirer.prompt(
+                                                [
+                                                    employeeQuestions.employeeName,
+                                                    employeeQuestions.employeeId,
+                                                    employeeQuestions.employeeEmail,
+                                                    {
+                                                        type: 'input',
+                                                        message: 'What is your school?',
+                                                        name: 'SchoolPrompt'
+                                                    }
 
-                                    case "Intern":
-                                        inquirer.prompt(
-                                            [
-                                                employeeQuestions.employeeName,
-                                                employeeQuestions.employeeId,
-                                                employeeQuestions.employeeEmail,
-                                                {
-                                                    type: 'input',
-                                                    message: 'What is your school?',
-                                                    name: 'SchoolPrompt'
+                                                ]
+                                            )
+                                                .then((responseIntern) => {
+                                                    const data = responseIntern;
+                                                    let intern = null;
+                                                    try {
+                                                        intern = new Intern(data.EmployeePrompt, data.IdPrompt, data.EmailPrompt, data.SchoolPrompt);
+                                                        commonFunctionsOfType(intern);
+
+                                                    }
+                                                    catch (err) {
+                                                        console.log(err.message);
+                                                        askType();
+                                                        return;
+                                                    }
                                                 }
-
-                                            ]
-                                        )
-                                            .then((responseIntern) => {
-                                                const data = responseIntern;
-                                                const intern = new Intern(data.EmployeePrompt, data.IdPrompt, data.EmailPrompt, data.SchoolPrompt);
-                                                commonFunctionsOfType(intern);
-
-                                            }
-
-                                            );
-                                        break;
-                                    case "Engineer":
-                                        inquirer.prompt(
-                                            [
-                                                employeeQuestions.employeeName,
-                                                employeeQuestions.employeeId,
-                                                employeeQuestions.employeeEmail,
-                                                {
-                                                    type: 'input',
-                                                    message: 'What is your Github url?',
-                                                    name: 'GithubPrompt'
+                                                );
+                                            break;
+                                        case "Engineer":
+                                            inquirer.prompt(
+                                                [
+                                                    employeeQuestions.employeeName,
+                                                    employeeQuestions.employeeId,
+                                                    employeeQuestions.employeeEmail,
+                                                    {
+                                                        type: 'input',
+                                                        message: 'What is your Github url?',
+                                                        name: 'GithubPrompt'
+                                                    }
+                                                ]
+                                            )
+                                                .then((responseEngineer) => {
+                                                    const data = responseEngineer;
+                                                    let engineer = null;
+                                                    try {
+                                                        engineer = new Engineer(data.EmployeePrompt, data.IdPrompt, data.EmailPrompt, data.GithubPrompt);
+                                                        commonFunctionsOfType(engineer);
+                                                    }
+                                                    catch (err) {
+                                                        console.log(err.message);
+                                                        askType();
+                                                        return;
+                                                    }
                                                 }
-
-                                            ]
-                                        )
-                                            .then((responseEngineer) => {
-                                                const data = responseEngineer;
-                                                const engineer = new Engineer(data.EmployeePrompt, data.IdPrompt, data.EmailPrompt, data.GithubPrompt)
-                                                commonFunctionsOfType(engineer);
-                                            }
-
-                                            );
-                                        break;
-                                    default:
-                                        console.log(`Unrecognized employee type: ${responseEmployeeType.EmployeePrompt}`)
-                                        break;
+                                                );
+                                            break;
+                                        default:
+                                            console.log(`Unrecognized employee type: ${responseEmployeeType.EmployeePrompt}`)
+                                            break;
+                                    }
+                                }
+                                else {
+                                    const renderedHTML = render(arrayOfEmployees);
+                                    writeToFile(filename, renderedHTML);
                                 }
                             }
-                            else {
-                                const renderdHTML = render(arrayOfEmployees);
-                                writeToFile(filename, renderdHTML);
-                                //process.exit(0);
-                                // write to file
-                            }
-                        }
-                        );
-                }
+                            );
+                    }
 
-                const commonFunctionsOfType = (data) => {
-                    arrayOfEmployees.push(data);
+                    const commonFunctionsOfType = (data) => {
+                        arrayOfEmployees.push(data);
+                        askType();
+                    }
+
                     askType();
                 }
+            );
+    }
 
-                askType();
-
-            }
-        );
-
+    askManager();
 }
 
 function writeToFile(fileName, rendered) {
-    //const fs = require('fs');
-    //const output = generated.generateMarkdown(data);
     fs.writeFile(fileName, rendered, (err) =>
         err ? console.log(err) : console.log('Success!')
     );

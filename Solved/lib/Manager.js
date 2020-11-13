@@ -2,17 +2,22 @@
 const Employee = require("./Employee");
 
 class Manager extends Employee {
-    constructor(name, id, email, officeNumber = 0){
+    constructor(name, id, email, officeNumber = 0) {
         super(name, id, email);
-        this.officeNumber = officeNumber;
 
+        const officeguy = parseInt(officeNumber);
+        if (isNaN(officeguy)) {
+            throw new Error(`Office number ${officeNumber} must be a number`);
+        }
+
+        this.officeNumber = officeNumber;
     }
 
-    getOfficeNumber(){
+    getOfficeNumber() {
         return this.officeNumber;
     }
 
-    getRole(){
+    getRole() {
         return "Manager";
     }
 }

@@ -5,6 +5,13 @@ class Engineer extends Employee {
     constructor(name, id, email, github){
         super(name, id, email);
 
+        if (!github.includes("http"))
+        {
+            console.log(`Your github account should contain an "http"`);
+            return null;
+        }
+
+
         this.github = github;
     }
 
