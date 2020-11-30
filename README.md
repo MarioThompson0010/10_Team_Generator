@@ -19,11 +19,13 @@ The program uses npm's Inquirer to find out information. The name, id, and email
 ## How to run the program:
 
 1) Open a terminal. 
-2) Type "node app.js" 
-3) Answer the questions
-4) When you're done, select "Exit"
-5) Go to the output folder, then open the html file
-6) View the html file in a browser
+2) In the terminal type "npm install inquirer" (without the quotes)
+3) Again in the terminal type "npm install jest"
+4) Type "node app.js" 
+5) Answer the questions
+6) When you're done, select "Exit"
+7) Go to the output folder, then open the html file
+8) View the html file in a browser
 
 ## How to test this app
 
